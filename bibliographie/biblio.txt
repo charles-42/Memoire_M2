@@ -1,0 +1,7 @@
+
+NSP Bert
+https://towardsdatascience.com/bert-for-next-sentence-prediction-466b67f8226f
+
+Bert =
+Masked langage modelling (MLM): understand relationships between words
+Next sentence prediction (NSP): understand longer-term dependencies across sentences.
