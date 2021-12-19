@@ -1,2 +1,0 @@
-from transformers import BertTokenizer, BertForNextSentencePrediction
-import torch
