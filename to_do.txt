@@ -1,0 +1,5 @@
+1 = ajouter à l'id_seq la base R ou V
+2 = résultat humain: calculer dans une table à part
+3 = Réponse ou pas réponse: calculer dans un table à part
+
+

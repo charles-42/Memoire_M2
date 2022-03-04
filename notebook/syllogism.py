@@ -1,3 +1,6 @@
+from numpy import true_divide
+
+
 class Syllogism:
     """ class used to analyse syllogisms for Ragni2016 and Verser2018
     
@@ -6,25 +9,27 @@ class Syllogism:
     
     """
 
-    table_de_verite = {"AA1":["Aac", "Iac", "Ica"], "AA2":["Aca", "Iac", "Ica"], "AA3":"NVC", "AA4":["Iac", "Ica"],
-                       "AI1":"NVC", "AI2":["Iac", "Ica"], "AI3":"NVC", "AI4":["Iac", "Ica"],
+    table_de_verite = {"AA1":["Aac", "Iac", "Ica"], "AA2":["Aca", "Iac", "Ica"], "AA3":["NVC"], "AA4":["Iac", "Ica"],
+                       "AI1":["NVC"], "AI2":["Iac", "Ica"], "AI3":["NVC"], "AI4":["Iac", "Ica"],
                        "AE1":["Eac", "Eca", "Oac", "Oca"], "AE2":["Oac"], "AE3":["Eac", "Eca", "Oac", "Oca"], "AE4":["Oac"],
-                       "AO1":"NVC", "AO2":"NVC", "AO3":["Oca"], "AO4":["Oac"],  
-                       "IA1":["Iac", "Oca"], "IA2":"NVC", "IA3":"NVC", "IA4":["Iac", "Oca"],
+                       "AO1":["NVC"], "AO2":["NVC"], "AO3":["Oca"], "AO4":["Oac"],  
+                       "IA1":["Iac", "Oca"], "IA2":["NVC"], "IA3":["NVC"], "IA4":["Iac", "Oca"],
                        "IE1":["Oac"], "IE2":["Oac"], "IE3":["Oac"], "IE4":["Oac"], 
                        "EA1":["Oca"], "EA2":["Eac", "Eca", "Oac", "Oca"], "EA3":["Eac", "Eca", "Oac", "Oca"], "EA4":["Oca"],
                        "EI1":["Oca"], "EI2":["Oca"], "EI3":["Oca"], "EI4":["Oca"], 
-                       "OA1":"NVC", "OA2":"NVC", "OA3":["Oac"], "OA4":["Oca"],
-                       "II1":"NVC", "II2":"NVC", "II3":"NVC", "II4":"NVC",
-                       "IO1":"NVC", "IO2":"NVC", "IO3":"NVC", "IO4":"NVC",
-                       "EE1":"NVC", "EE2":"NVC", "EE3":"NVC", "EE4":"NVC",
-                       "EO1":"NVC", "EO2":"NVC", "EO3":"NVC", "EO4":"NVC",
-                       "OA1":"NVC", "OA2":"NVC", "OA3":"NVC", "OA4":"NVC",
-                       "OE1":"NVC", "OE2":"NVC", "OE3":"NVC", "OE4":"NVC",
-                       "OO1":"NVC", "OO2":"NVC", "OO3":"NVC", "OO4":"NVC"
+                       "OA1":["NVC"], "OA2":["NVC"], "OA3":["Oac"], "OA4":["Oca"],
+                       "II1":["NVC"], "II2":["NVC"], "II3":["NVC"], "II4":["NVC"],
+                       "IO1":["NVC"], "IO2":["NVC"], "IO3":["NVC"], "IO4":["NVC"],
+                       "EE1":["NVC"], "EE2":["NVC"], "EE3":["NVC"], "EE4":["NVC"],
+                       "EO1":["NVC"], "EO2":["NVC"], "EO3":["NVC"], "EO4":["NVC"],
+                       "OA1":["NVC"], "OA2":["NVC"], "OA3":["NVC"], "OA4":["NVC"],
+                       "OE1":["NVC"], "OE2":["NVC"], "OE3":["NVC"], "OE4":["NVC"],
+                       "OO1":["NVC"], "OO2":["NVC"], "OO3":["NVC"], "OO4":["NVC"]
                     }
     table_mood = {"A":"All", "I":"Some", "E":"No", "O":"Some not"}
     
+    choice_form = ['Aac', 'Aca', 'Iac', 'Ica', 'Oac', 'Oca', 'Eac', 'Eca', 'NVC']
+
     def __init__(self, syllogism: str):
         self.syllogism = syllogism
         self.listed = self.__rawsyllogism_to_list()
@@ -171,8 +176,8 @@ class Syllogism:
             full_dictionnaire.update(d)
         for form, conclusions_list in self.__class__.table_de_verite.items():
             if self.full_form == form:
-                if conclusions_list == "NVC":
-                    return "NVC"
+                if conclusions_list == ["NVC"]:
+                    return ["NVC"]
                 for valid_conclusion in conclusions_list:
                     c = []
                     for character in valid_conclusion:
@@ -190,17 +195,15 @@ class Syllogism:
     #Est ce qu'une full form peut ne pas $etre dans le dico? à tester
         for form, conclusions_list in self.__class__.table_de_verite.items():
             if self.full_form == form:
-                if conclusions_list == "NVC":
-                    return True
-                else:
-                    return False
+                return False if conclusions_list == ["NVC"] else True
+
     
     def __conclusion_to_str(self):
         """
         Transform the valid conclusion list to string format.
         """ 
-        if self.conclusion == "NVC":
-            return "NVC"
+        if self.conclusion == ["NVC"]:
+            return ["NVC"]
         conclusion_str=[]
         for concl in self.conclusion:
             conclusion_str.append(self.premisse_to_str(concl[0:3]))
@@ -237,9 +240,9 @@ class Syllogism:
                     second element: a booleenn, the conclusion is valid or not
         """
         if ccl == 'NVC':
-            return ("NVC",True) if self.conclusion == "NVC" else ("NVC",False)
+            return ("NVC",True) if self.conclusion == ["NVC"] else ("NVC",False)
         if isinstance(ccl,str):
-            premisse = ccl.split(";")
+            ccl = ccl.split(";")
         for valid in self.conclusion:
             if valid[0:3] == ccl:
                 return (valid[3], True)
@@ -252,12 +255,6 @@ class Syllogism:
             choice_to_str.append(self.premisse_to_str(c))
         return choice_to_str
 
-    def choice_to_form(self,choice):
-        choice = self.__rawsyllogism_to_list(input=choice, input_type="choices")
-        choices_form=[]
-        for c in choice:
-            choices_form.append(self.evaluate_form(c))
-        return choices_form
 
     def choice_to_choice_list(self,choice):
         #Très moche
