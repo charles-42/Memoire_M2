@@ -38,7 +38,7 @@ def select_best_few_shot(pred_list):
     
     # we want to know if entail is the higher probability for one of the choices
     for i in pred_list[:-1]:
-        if i[2] > i[1] and i[2] > i[1]:
+        if i[2] > i[1] and i[2] > i[0]:
             conclusion_list.append("entail")
         else :
             conclusion_list.append("no_entail")
@@ -60,12 +60,9 @@ def select_best_few_shot(pred_list):
 
 
 # We get the answer of each mode
-
 df_final['best_few_shot'] = df_final.choice_mnli_pred.apply(lambda x: select_best_few_shot(x))
+
 # On détermine si les réponses sont valides ou non
-
-
-
 df_final['few_shot_result'] = df_final[["task_form","best_few_shot"]].apply(lambda x:  x[1] in table_de_verite[x[0]], axis=1)
 
 #df_final['few_shot_result'] = df_final[["task","best_few_shot"]].apply(lambda x:  x[1] in sy.Syllogism(x[0]).conclusion, axis=1)
