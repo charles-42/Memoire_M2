@@ -9,21 +9,24 @@ import matplotlib.pyplot as plt
 
 #st.write("Natural Language Processing algorithms that aim to perform tasks related to human language are now achieving impressive results in sentiment analysis, translation or text classification. We seek to understand whether they rely on a logic model to perform these tasks. This model could be formal logic, human "logic" (reconstructed from the training corpus) or a specific logic resulting from the algorithms used.")
 
-"""
-# Syllogism resolution 
+"# Syllogism resolution "
 
-Natural Language Processing algorithms that aim to perform tasks related to human language are now achieving impressive results in sentiment analysis, translation or text classification. We seek to understand whether they rely on a logic model to perform these tasks. This model could be formal logic, human "logic" (reconstructed from the training corpus) or a specific logic resulting from the algorithms used.
+with st.expander("See explanation", expanded=True):
 
-To address this problem, we have tested two pre-trained NLP models against a set of 6500 syllogisms belonging to the 64 classical forms. 
-- The first model is a **`bert-base-uncased`** (named simple in the next dataframes and charts). This model is pretrained on a large unlabelled corpus of English data. We used its next sententence prediction function.  So we gave it as input on one side the two premises of the syllogism and on the other side 8 possible conclusions.For each conclusion the model estimates the probability that it is the next sentence. The conclusion with the highest probability is considered as the answer of the algorithm.
-- The second one is a **`facebook/bart-large-mnli`** (also called mnli). This model is pre-trained on the mnli corpus and aims at predicting whether for a given sentence a second sentence is its entailment, its contradiction or is neutral to it. We gave it as input the two premisses and the 8 possible conclusion. The conclusion with the highest "entailment" probability is considered as the answer.
+    """
+    
+    Natural Language Processing algorithms that aim to perform tasks related to human language are now achieving impressive results in sentiment analysis, translation or text classification. We seek to understand whether they rely on a logic model to perform these tasks. This model could be formal logic, human "logic" (reconstructed from the training corpus) or a specific logic resulting from the algorithms used.
 
-We also had to study the syllogisms without valid conclusion. It is particularly difficult to make an NLP algorithm predict the absence of valid conclusion. We have explored two ways to tackle this problem. 
-- define a rule such that if the conclusion with the highest probability is below a threshold then the answer is replaced by "Non valid answer".
-- for the mnli algorithm only, if for all conclusion the probability of contradiction or neutral is higher than the probability of entailment then the answer is replaced by "Non valid answer"
+    To address this problem, we have tested two pre-trained NLP models against a set of 6500 syllogisms belonging to the 64 classical forms. 
+    - The first model is a **`bert-base-uncased`** (named simple in the next dataframes and charts). This model is pretrained on a large unlabelled corpus of English data. We used its next sententence prediction function.  So we gave it as input on one side the two premises of the syllogism and on the other side 8 possible conclusions.For each conclusion the model estimates the probability that it is the next sentence. The conclusion with the highest probability is considered as the answer of the algorithm.
+    - The second one is a **`facebook/bart-large-mnli`** (also called mnli). This model is pre-trained on the mnli corpus and aims at predicting whether for a given sentence a second sentence is its entailment, its contradiction or is neutral to it. We gave it as input the two premisses and the 8 possible conclusion. The conclusion with the highest "entailment" probability is considered as the answer.
 
-You can explore these different scenarios using the slider. For  mnli, the threshold called "max" corresponds to the second path where we compare the probabilities of entailment, contradiction and neutral
-"""
+    We also had to study the syllogisms without valid conclusion. It is particularly difficult to make an NLP algorithm predict the absence of valid conclusion. We have explored two ways to tackle this problem. 
+    - define a rule such that if the conclusion with the highest probability is below a threshold then the answer is replaced by "Non valid answer".
+    - for the mnli algorithm only, if for all conclusion the probability of contradiction or neutral is higher than the probability of entailment then the answer is replaced by "Non valid answer"
+
+    You can explore these different scenarios using the slider. For  mnli, the threshold called "max" corresponds to the second path where we compare the probabilities of entailment, contradiction and neutral
+    """
 
 
 
