@@ -31,30 +31,38 @@ with st.expander("See explanation", expanded=True):
 
 
 # Load 10,000 rows of data into the dataframe.
-df_valid= pd.read_csv("./data/results/result_valid_30_01_22.csv")
+df_valid = pd.read_csv("./data/results/result_valid_30_01_22.csv")
 df_valid = df_valid.set_index('task_form')
 
-valid_mean= pd.read_csv("./data/results/valid_mean_04_03_22.csv")
+valid_mean = pd.read_csv("./data/results/valid_mean_04_03_22.csv")
 valid_mean = valid_mean.set_index('type')
 
-valid_cor= pd.read_csv("./data/results/valid_cor_04_03_22.csv")
+valid_cor = pd.read_csv("./data/results/valid_cor_04_03_22.csv")
 
-df_unvalid= pd.read_csv("./data/results/result_unvalid_30_01_22.csv")
+df_unvalid = pd.read_csv("./data/results/result_unvalid_30_01_22.csv")
 df_unvalid = df_unvalid.set_index('task_form')
 
-unvalid_mean= pd.read_csv("./data/results/unvalid_mean_04_03_22.csv")
+unvalid_mean = pd.read_csv("./data/results/unvalid_mean_04_03_22.csv")
 unvalid_mean = unvalid_mean.set_index('type')
 
-unvalid_cor= pd.read_csv("./data/results/unvalid_cor_04_03_22.csv")
+unvalid_cor = pd.read_csv("./data/results/unvalid_cor_04_03_22.csv")
+
+similarity_valid = pd.read_csv("./data/results/result_similarity_valid.csv")
+similarity_valid = similarity_valid.set_index('task_form').sort_values(by="succes_human" ,ascending=False)
+
+similarity_unvalid = pd.read_csv("./data/results/result_similarity_unvalid.csv")
+similarity_unvalid = similarity_unvalid.set_index('task_form').sort_values(by="succes_human" ,ascending=False)
+
 
 
 # define the threshold
 
 seuil_simple = st.sidebar.select_slider('seuil bert-base-uncased', options=["0.9999965","0.9999968","0.9999972","0.9999974","0.999996","0.999997"], value= "0.9999965")
 seuil_mnli = st.sidebar.select_slider('seuil bart-mnli',  options=["max","00","03","05","10","20","30","40","50","60","70","80","90"], value = "03")
-display_graph = st.sidebar.checkbox('Display graph', value=True)
+display_graph = st.sidebar.checkbox('Display error graph', value=True)
 display_mean = st.sidebar.checkbox('Display means',  value=True)
 display_cor = st.sidebar.checkbox('Display correlations',  value=True)
+display_similarity_graph = st.sidebar.checkbox('Display similarity graph', value=True)
 display_raw = st.sidebar.checkbox('Display raw data',  value=False)
 
 
@@ -78,7 +86,7 @@ st.write("We first study the syllogisms that have a valid conclusion")
 
 if display_graph:
 
-    st.caption('Graph')
+    st.caption('Error graph')
     fig= plt.figure(figsize=(10, 4))
 
     if sort_way == 'Human success':
@@ -131,3 +139,42 @@ if display_mean:
 if display_raw:
     st.caption('Raw data')
     st.write(unvalid_filtered_data)
+
+st.subheader('Study for similarity')
+
+if display_similarity_graph:
+    
+    st.write("We look when human and algorithm give the same answer. Human and algorith have to choose between 8 possible answer so if the algorithm is random the average similarity rate should be 0.125 ")
+    st.write("We start looking for valid syllogism")
+    st.caption('Similarity between human response and mnli when human are right and wrong')
+    fig= plt.figure(figsize=(10, 4))
+    if sort_way == 'Human success':
+        sns.lineplot(data=similarity_valid[["mean_mnli_human_right","mean_mnli_human_false","succes_human"]], palette=["g","r","b"])
+    else:
+        sns.lineplot(data=similarity_valid[["mean_mnli_human_right","mean_mnli_human_false","succes_human"]].sort_index(), palette=["g","r","b"])  
+    st.pyplot(fig)
+
+    st.caption('Similarity between human response and the simple moddle when human are right and wrong')
+    fig= plt.figure(figsize=(10, 4))
+    if sort_way == 'Human success':
+        sns.lineplot(data=similarity_valid[["mean_simple_human_right","mean_simple_human_false","succes_human"]], palette=["g","r","b"])
+    else:
+        sns.lineplot(data=similarity_valid[["mean_simple_human_right","mean_simple_human_false","succes_human"]].sort_index(), palette=["g","r","b"])  
+    st.pyplot(fig)
+
+    st.write("We look now for unvalid syllogism. We haven't use the threshold so the algorithme is never right (answer: No Valid Conclusion")
+    st.caption('Similarity between human response and mnli when human are right and wrong')
+    fig= plt.figure(figsize=(10, 4))
+    if sort_way == 'Human success':
+        sns.lineplot(data=similarity_unvalid[["mean_mnli_human_right","mean_mnli_human_false","succes_human"]], palette=["g","r","b"])
+    else:
+        sns.lineplot(data=similarity_unvalid[["mean_mnli_human_right","mean_mnli_human_false","succes_human"]].sort_index(), palette=["g","r","b"])  
+    st.pyplot(fig)
+
+    st.caption('Similarity between human response and the simple moddle when human are right and wrong')
+    fig= plt.figure(figsize=(10, 4))
+    if sort_way == 'Human success':
+        sns.lineplot(data=similarity_unvalid[["mean_simple_human_right","mean_simple_human_false","succes_human"]], palette=["g","r","b"])
+    else:
+        sns.lineplot(data=similarity_unvalid[["mean_simple_human_right","mean_simple_human_false","succes_human"]].sort_index(), palette=["g","r","b"])  
+    st.pyplot(fig)
