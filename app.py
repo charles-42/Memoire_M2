@@ -3,11 +3,8 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-
-
-#st.title('Syllogism resolution')
-
-#st.write("Natural Language Processing algorithms that aim to perform tasks related to human language are now achieving impressive results in sentiment analysis, translation or text classification. We seek to understand whether they rely on a logic model to perform these tasks. This model could be formal logic, human "logic" (reconstructed from the training corpus) or a specific logic resulting from the algorithms used.")
+import plotly.express as px
+#import plotly.figure_factory as ff
 
 "# Syllogism resolution "
 
@@ -30,151 +27,114 @@ with st.expander("See explanation", expanded=True):
 
 
 
-# Load 10,000 rows of data into the dataframe.
-df_valid = pd.read_csv("./data/results/result_valid_30_01_22.csv")
-df_valid = df_valid.set_index('task_form')
-
-valid_mean = pd.read_csv("./data/results/valid_mean_04_03_22.csv")
-valid_mean = valid_mean.set_index('type')
-
-valid_cor = pd.read_csv("./data/results/valid_cor_04_03_22.csv")
-
-df_unvalid = pd.read_csv("./data/results/result_unvalid_30_01_22.csv")
-df_unvalid = df_unvalid.set_index('task_form')
-
-unvalid_mean = pd.read_csv("./data/results/unvalid_mean_04_03_22.csv")
-unvalid_mean = unvalid_mean.set_index('type')
-
-unvalid_cor = pd.read_csv("./data/results/unvalid_cor_04_03_22.csv")
-
-similarity_valid = pd.read_csv("./data/results/result_similarity_valid.csv")
-similarity_valid = similarity_valid.set_index('task_form').sort_values(by="succes_human" ,ascending=False)
-
-similarity_unvalid = pd.read_csv("./data/results/result_similarity_unvalid.csv")
-similarity_unvalid = similarity_unvalid.set_index('task_form').sort_values(by="succes_human" ,ascending=False)
+# Load Data
 
 
+df_valid_aris = pd.read_csv("./data/results/result_similarity_valid.csv")
+df_valid_aris = df_valid_aris.set_index('task_form').sort_values(by="succes_human" ,ascending=False)
+df_valid_aris = df_valid_aris.rename(columns={"succes_simple_0.9999965": "succes_simple"})
 
-# define the threshold
+df_unvalid = pd.read_csv("./data/results/result_similarity_unvalid.csv")
+df_unvalid = df_unvalid.set_index('task_form').sort_values(by="succes_human" ,ascending=False)
+df_unvalid = df_unvalid.rename(columns={"succes_simple_0.9999965": "succes_simple"})
 
-seuil_simple = st.sidebar.select_slider('seuil bert-base-uncased', options=["0.9999965","0.9999968","0.9999972","0.9999974","0.999996","0.999997"], value= "0.9999965")
-seuil_mnli = st.sidebar.select_slider('seuil bart-mnli',  options=["max","00","03","05","10","20","30","40","50","60","70","80","90"], value = "03")
-display_graph = st.sidebar.checkbox('Display error graph', value=True)
-display_mean = st.sidebar.checkbox('Display means',  value=True)
-display_cor = st.sidebar.checkbox('Display correlations',  value=True)
-display_similarity_graph = st.sidebar.checkbox('Display similarity graph', value=True)
-display_raw = st.sidebar.checkbox('Display raw data',  value=False)
+# Chart Options
+
+st.subheader('Chart options')
+
+sort_way = st.radio(
+"Sort by",
+('Human success', 'Syllogism Form'))
+
+implicatur = st.radio(
+"Criteria of validity:",
+('Aristotle', 'Frege', 'Only show implicatur'))
+
+# implicatur
 
 
 
-# Result for valid syllogism
 
-valid_filtered_data = df_valid[["succes_human",f"succes_simple_{seuil_simple}", f"succes_mnli_{seuil_mnli}"]]
-valid_mean_filtered = valid_mean[["succes_human",f"succes_simple_{seuil_simple}", f"succes_mnli_{seuil_mnli}"]]
-valid_cor_filtered = valid_cor[[f"succes_simple_{seuil_simple}", f"succes_mnli_{seuil_mnli}"]]
+if implicatur == 'Frege':
+    df_valid = df_valid_aris[df_valid_aris["implicatur"]==False ]
+     
+elif implicatur == 'Only show implicatur':
+    df_valid = df_valid_aris[df_valid_aris["implicatur"]==True]
 
-
-if display_graph:
-
-    st.subheader('Chart options')
-    sort_way = st.radio(
-     "Sort by",
-     ('Human success', 'Syllogism Form'))
-
-st.subheader('Valid syllogisms')
-st.write("We first study the syllogisms that have a valid conclusion")
-
-if display_graph:
-
-    st.caption('Error graph')
-    fig= plt.figure(figsize=(10, 4))
-
-    if sort_way == 'Human success':
-        sns.lineplot(data=valid_filtered_data)
-    else:
-        sns.lineplot(data=valid_filtered_data.sort_index())
-    st.pyplot(fig)
-
-if display_cor:
-    st.caption('Correlation with human answers')
-    st.write(valid_cor_filtered)
-
-if display_mean:
-    st.caption('Average succes rate by syllogism form')
-    st.write(valid_mean_filtered)
-
-if display_raw:
-    st.caption('Raw data')
-    st.write(valid_filtered_data)
+else:
+    df_valid = df_valid_aris
 
 
-# Result for unvalid syllogism
-unvalid_filtered_data = df_unvalid[["succes_human",f"succes_simple_{seuil_simple}", f"succes_mnli_{seuil_mnli}"]]
-unvalid_mean_filtered = unvalid_mean[["succes_human",f"succes_simple_{seuil_simple}", f"succes_mnli_{seuil_mnli}"]]
-unvalid_cor_filtered = unvalid_cor[[f"succes_simple_{seuil_simple}", f"succes_mnli_{seuil_mnli}"]]
-
-st.subheader('Unvalid syllogisms')
-
-if display_graph:
 
 
-    st.caption('Graph')
-    fig= plt.figure(figsize=(10, 4))
-
-    if sort_way == 'Human success':
-        sns.lineplot(data=unvalid_filtered_data)
-    else:
-        sns.lineplot(data=unvalid_filtered_data.sort_index())
-    st.pyplot(fig)
-
-if display_cor:
-    st.caption('Correlation with human answers')
-    st.write(unvalid_cor_filtered)
-
-if display_mean:
-    st.caption('Average succes rate by syllogism form')
-    st.write(unvalid_mean_filtered)
+#######--------Valid syllogism----------#########
 
 
-if display_raw:
-    st.caption('Raw data')
-    st.write(unvalid_filtered_data)
 
-st.subheader('Study for similarity')
-
-if display_similarity_graph:
+with st.container():
+    st.subheader('Valid syllogisms')
+    st.write("We first study the syllogisms that have a valid conclusion")
     
-    st.write("We look when human and algorithm give the same answer. Human and algorith have to choose between 8 possible answer so if the algorithm is random the average similarity rate should be 0.125 ")
-    st.write("We start looking for valid syllogism")
-    st.caption('Similarity between human response and mnli when human are right and wrong')
-    fig= plt.figure(figsize=(10, 4))
-    if sort_way == 'Human success':
-        sns.lineplot(data=similarity_valid[["mean_mnli_human_right","mean_mnli_human_false","succes_human"]], palette=["g","r","b"])
-    else:
-        sns.lineplot(data=similarity_valid[["mean_mnli_human_right","mean_mnli_human_false","succes_human"]].sort_index(), palette=["g","r","b"])  
-    st.pyplot(fig)
+    # bart-large-MNLI
 
-    st.caption('Similarity between human response and the simple moddle when human are right and wrong')
-    fig= plt.figure(figsize=(10, 4))
     if sort_way == 'Human success':
-        sns.lineplot(data=similarity_valid[["mean_simple_human_right","mean_simple_human_false","succes_human"]], palette=["g","r","b"])
-    else:
-        sns.lineplot(data=similarity_valid[["mean_simple_human_right","mean_simple_human_false","succes_human"]].sort_index(), palette=["g","r","b"])  
-    st.pyplot(fig)
+        fig = px.line(df_valid, x=df_valid.index, y="succes_human", title="bart-large-mnli algortihm for valid syllogism")
 
-    st.write("We look now for unvalid syllogism. We haven't use the threshold so the algorithme is never right (answer: No Valid Conclusion")
-    st.caption('Similarity between human response and mnli when human are right and wrong')
-    fig= plt.figure(figsize=(10, 4))
-    if sort_way == 'Human success':
-        sns.lineplot(data=similarity_unvalid[["mean_mnli_human_right","mean_mnli_human_false","succes_human"]], palette=["g","r","b"])
     else:
-        sns.lineplot(data=similarity_unvalid[["mean_mnli_human_right","mean_mnli_human_false","succes_human"]].sort_index(), palette=["g","r","b"])  
-    st.pyplot(fig)
+        fig = px.line(df_valid.sort_index(), x=df_valid.index, y="succes_human", title="bart-large-mnli algortihm for valid syllogisme")
+    
+    fig.add_scatter(x=df_valid.index, y=df_valid.succes_mnli_00,marker=dict(color="darkorchid" ),name="% Success for bart-large-mnli") # Not what is desired - need a line 
+    #fig.add_trace(px.line(df_valid, x=df_valid.index, y="succes_mnli_00",labels={'pop':'population of Canada'}))
+    fig.add_bar(x=df_valid.index, y=df_valid.mean_mnli_human_right,marker=dict(color="yellowgreen"), name="% Similarity when human is right")
+    fig.add_bar(x=df_valid.index, y=df_valid.mean_mnli_human_false,marker=dict(color="indianred"), name="% Similarity when human is wrong")
+    fig.update_layout(barmode='stack')
+    #fig.show()
+    st.plotly_chart(fig)
 
-    st.caption('Similarity between human response and the simple moddle when human are right and wrong')
-    fig= plt.figure(figsize=(10, 4))
+    # bert-large-MNLI
+
     if sort_way == 'Human success':
-        sns.lineplot(data=similarity_unvalid[["mean_simple_human_right","mean_simple_human_false","succes_human"]], palette=["g","r","b"])
+        fig = px.line(df_valid, x=df_valid.index, y="succes_human", title="BERT algortihm for valid syllogism")
+
     else:
-        sns.lineplot(data=similarity_unvalid[["mean_simple_human_right","mean_simple_human_false","succes_human"]].sort_index(), palette=["g","r","b"])  
-    st.pyplot(fig)
+        fig = px.line(df_valid.sort_index(), x=df_valid.index, y="succes_human", title="BERT algortihm for valid syllogisme")
+    
+    fig.add_scatter(x=df_valid.index, y=df_valid.succes_simple,marker=dict(color="darkorchid" ),name="% of BERT Success")
+    fig.add_bar(x=df_valid.index, y=df_valid.mean_simple_human_right,marker=dict(color="yellowgreen"), name="% Similarity when human is right")
+    fig.add_bar(x=df_valid.index, y=df_valid.mean_simple_human_false,marker=dict(color="indianred"), name="% Similarity when human is wrong")
+    fig.update_layout(barmode='stack')
+    #fig.show()
+    st.plotly_chart(fig)
+
+
+#######--------UnValid syllogism----------#########
+
+
+with st.container():
+    st.subheader('Unvalid syllogisms')
+    st.write("We were unable to get the algorithms to predict that the syllogisms did not have a valid answer. We therefore observe in the cases where humans and the algorithm were wrong whether they gave the same answer. ")
+    # bart-large-MNLI
+
+    if sort_way == 'Human success':
+        fig = px.line(df_unvalid, x=df_unvalid.index, y="succes_human", title="bart-large-mnli algortihm for unvalid syllogism")
+
+    else:
+        fig = px.line(df_unvalid.sort_index(), x=df_unvalid.index, y="succes_human", title="bart-large-mnli algortihm for unvalid syllogisme")
+    
+    fig.add_bar(x=df_unvalid.index, y=df_unvalid.mean_mnli_human_false,marker=dict(color="indianred"), name="% Similarity when human is wrong")
+    fig.update_layout(barmode='stack')
+
+    st.plotly_chart(fig)
+
+    # bert-large-MNLI
+
+    if sort_way == 'Human success':
+        fig = px.line(df_unvalid, x=df_unvalid.index, y="succes_human", title="BERT algortihm for unvalid syllogism")
+
+    else:
+        fig = px.line(df_unvalid.sort_index(), x=df_unvalid.index, y="succes_human", title="BERT algortihm for unvalid syllogisme")
+    
+    fig.add_bar(x=df_unvalid.index, y=df_unvalid.mean_simple_human_false,marker=dict(color="indianred"), name="% Similarity when human is wrong")
+    fig.update_layout(barmode='stack')
+    #fig.show()
+    st.plotly_chart(fig)
