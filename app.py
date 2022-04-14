@@ -106,6 +106,7 @@ with st.container():
     #fig.show()
     st.plotly_chart(fig)
 
+    st.write("We observe that Bert obtains bad results when one of the two premises is negative")
 
 #######--------UnValid syllogism----------#########
 
