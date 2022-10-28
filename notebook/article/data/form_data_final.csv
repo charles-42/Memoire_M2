@@ -1,0 +1,28 @@
+task_form,has_conclusion,index_conclusion,implicatur,mode,signe,absurde
+IA4,True,"[2, 5]",False,particulier,positif,False
+EA3,True,"[4, 5, 6, 7]",False,universel,negatif,False
+AI2,True,"[2, 3]",False,particulier,positif,False
+AA1,True,"[0, 2, 3]",False,universel,positif,False
+OA4,True,[5],False,particulier,negatif,True
+AO3,True,[5],False,particulier,negatif,True
+AE3,True,"[4, 5, 6, 7]",False,universel,negatif,False
+EI3,True,[5],False,particulier,negatif,False
+EI2,True,[5],False,particulier,negatif,False
+EA1,True,[5],True,universel,negatif,False
+IE3,True,[4],False,particulier,negatif,False
+AA2,True,"[1, 2, 3]",False,universel,positif,False
+OA3,True,[4],False,particulier,negatif,True
+AI4,True,"[2, 3]",False,particulier,positif,False
+IE4,True,[4],False,particulier,negatif,False
+AA4,True,"[2, 3]",True,universel,positif,False
+AE4,True,[4],True,universel,negatif,False
+IA1,True,"[2, 5]",False,particulier,positif,False
+AE1,True,"[4, 5, 6, 7]",False,universel,negatif,False
+EI1,True,[5],False,particulier,negatif,False
+AO4,True,[4],False,particulier,negatif,True
+EA2,True,"[4, 5, 6, 7]",False,universel,negatif,False
+IE1,True,[4],False,particulier,negatif,False
+AE2,True,[4],True,universel,negatif,False
+IE2,True,[4],False,particulier,negatif,False
+EA4,True,[5],True,universel,negatif,False
+EI4,True,[5],False,particulier,negatif,False

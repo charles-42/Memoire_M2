@@ -1,0 +1,65 @@
+,task_form,has_conclusion,index_conclusion,implicatur
+0,IA4,True,"[2, 5]",False
+1,EA3,True,"[4, 5, 6, 7]",False
+2,AI2,True,"[2, 3]",False
+3,AA1,True,"[0, 2, 3]",False
+4,OA4,True,[5],False
+5,IO2,False,[8],False
+6,AO3,True,[5],False
+7,IA2,False,[8],False
+8,AE3,True,"[4, 5, 6, 7]",False
+9,EI3,True,[5],False
+10,EI2,True,[5],False
+11,EO4,False,[8],False
+12,EE1,False,[8],False
+13,EA1,True,[5],True
+14,OO1,False,[8],False
+15,EE4,False,[8],False
+16,OA2,False,[8],False
+17,OO3,False,[8],False
+18,OE2,False,[8],False
+19,OE4,False,[8],False
+20,EE2,False,[8],False
+21,IE3,True,[4],False
+22,II2,False,[8],False
+23,IA3,False,[8],False
+24,AA2,True,"[1, 2, 3]",False
+25,OA3,True,[4],False
+26,OO2,False,[8],False
+27,OI4,False,[8],False
+28,AI4,True,"[2, 3]",False
+29,OO4,False,[8],False
+30,IE4,True,[4],False
+31,AA4,True,"[2, 3]",True
+32,AE4,True,[4],True
+33,EO3,False,[8],False
+34,AO2,False,[8],False
+35,IA1,True,"[2, 5]",False
+36,IO3,False,[8],False
+37,EO1,False,[8],False
+38,II1,False,[8],False
+39,OE1,False,[8],False
+40,AA3,False,[8],False
+41,AE1,True,"[4, 5, 6, 7]",False
+42,EI1,True,[5],False
+43,AI1,False,[8],False
+44,II4,False,[8],False
+45,AI3,False,[8],False
+46,AO1,False,[8],False
+47,AO4,True,[4],False
+48,EA2,True,"[4, 5, 6, 7]",False
+49,IE1,True,[4],False
+50,IO1,False,[8],False
+51,AE2,True,[4],True
+52,OI3,False,[8],False
+53,II3,False,[8],False
+54,IE2,True,[4],False
+55,OA1,False,[8],False
+56,OI2,False,[8],False
+57,IO4,False,[8],False
+58,EA4,True,[5],True
+59,EI4,True,[5],False
+60,OI1,False,[8],False
+61,EE3,False,[8],False
+62,EO2,False,[8],False
+63,OE3,False,[8],False
